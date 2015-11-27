@@ -1,12 +1,12 @@
-var BrokerFactory = require('vc');
+var BrokerFactory = require('../index');
 var broker = BrokerFactory.create(mq, options);
-var agent = broker.getAgent();
+var agentBroker = broker.getAgent();
 var agentManager = broker.getAgentManager();
 var bot = broker.getBot();
 
+agentBroker.heartbeat();
 
-
-
+agentBroker.onHeartbeat(function(){});
 
 
 ///**
