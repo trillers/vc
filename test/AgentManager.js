@@ -1,3 +1,14 @@
+var BrokerFactory = require('vc');
+var broker = BrokerFactory.create(mq, options);
+var agent = broker.getAgent();
+var agentManager = broker.getAgentManager();
+var bot = broker.getBot();
+
+
+
+
+
+
 ///**
 // * Created by henryleu on 11/27/15.
 // */
