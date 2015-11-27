@@ -1,9 +1,7 @@
-var channels = require('./lib/channels-setting');
-var serviceFactory = require('./lib/proxy/redis-pubsub');
-module.exports = function(pub, sub){
-    var service = {};
-    service = serviceFactory(pub, sub);
-    service.init();
-    return service;
+var queueNames = require('./lib/queue-name-map');
+var VCFactory = require('./lib/proxy/VCFactory');
+module.exports = function(){
+    var factory = new VCFactory();
+    return factory;
 };
-module.exports.channels = channels;
+module.exports.queueNames = queueNames;
