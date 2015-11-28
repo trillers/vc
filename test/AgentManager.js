@@ -1,17 +1,17 @@
-var BrokerFactory = require('../index');
-var open = require('amqplib').connect('amqp://localhost');
-var brokerPromise = BrokerFactory.create(open);
-brokerPromise.then(function(broker){
-});
-
-
-var agentBroker = broker.getAgent();
-var agentManager = broker.getAgentManager();
-var bot = broker.getBot();
-
-agentBroker.heartbeat();
-
-agentBroker.onHeartbeat(function(){});
+//var BrokerFactory = require('../index');
+//var open = require('amqplib').connect('amqp://localhost');
+//var brokerPromise = BrokerFactory.create(open);
+//brokerPromise.then(function(broker){
+//});
+//
+//
+//var agentBroker = broker.getAgent();
+//var agentManager = broker.getAgentManager();
+//var bot = broker.getBot();
+//
+//agentBroker.heartbeat();
+//
+//agentBroker.onHeartbeat(function(){});
 
 
 ///**
