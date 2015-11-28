@@ -6,7 +6,7 @@ var open = require('amqplib').connect(url);
 
 describe('agent broker test', function(){
     it('send and on agent heartbeat', function(done){
-        var brokerPromise = BrokerFactory.create(open);
+        var brokerPromise = BrokerFactory.create(open, {agent: true, bot: true});
         brokerPromise.then(function(broker){
             var agentBroker = broker.getAgent();
             var botBroker = broker.getBot();
@@ -16,7 +16,7 @@ describe('agent broker test', function(){
             agentBroker.heartBeat({beat: 'i am a agent heart beat'});
             setTimeout(function(){
                 done();
-            }, 2000);
+            }, 3000);
         });
     })
 })
