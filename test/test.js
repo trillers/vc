@@ -1,7 +1,7 @@
 var VCR = require('../index');
 var pubClient = require('../lib/dep/redis-client')('pub');
 var subClient = require('../lib/dep/redis-client')('sub');
-var vcr = new VCR(pubClient, subClient);
+var vcr = VCR(pubClient, subClient);
 var assert = require('chai').assert;
 
 describe('vcr', function(done){
