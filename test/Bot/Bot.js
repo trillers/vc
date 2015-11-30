@@ -5,8 +5,9 @@ var url = 'amqp://' +rabbitmq.username + ':' + rabbitmq.password + '@' + rabbitm
 var open = require('amqplib').connect(url);
 
 describe('bot broker test', function(){
+    var brokerPromise = BrokerFactory.create(open, {bot: true, nm: true});
+
     it('send start agent request', function(done){
-        var brokerPromise = BrokerFactory.create(open, {nm: true, bot: true});
         brokerPromise.then(function(broker){
             var botBroker = broker.getBot();
             var nodeManagerBroker = broker.getNodeManager();

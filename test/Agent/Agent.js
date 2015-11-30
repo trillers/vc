@@ -5,8 +5,9 @@ var url = 'amqp://' +rabbitmq.username + ':' + rabbitmq.password + '@' + rabbitm
 var open = require('amqplib').connect(url);
 
 describe('bot broker test', function(){
+    var brokerPromise = BrokerFactory.create(open, {am: true, bot: true, nm: true, agent: true});
+
     it('send start agent request', function(done){
-        var brokerPromise = BrokerFactory.create(open, {nm: true, agent: true});
         brokerPromise.then(function(broker){
             var agentBroker = broker.getAgent();
             var nodeManagerBroker = broker.getNodeManager();
@@ -21,7 +22,6 @@ describe('bot broker test', function(){
     });
 
     it('send agent status change request', function(done){
-        var brokerPromise = BrokerFactory.create(open, {bot: true, agent: true});
         brokerPromise.then(function(broker){
             var botBroker = broker.getBot();
             var agentBroker = broker.getAgent();
@@ -29,6 +29,20 @@ describe('bot broker test', function(){
                 console.log(changeInfo);
             })
             agentBroker.statusChange({info: 'agent status change'});
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    })
+
+    it('on node manager status request', function(done){
+        brokerPromise.then(function(broker){
+            var agentBroker = broker.getAgent();
+            var nodeManagerBroker = broker.getNodeManager();
+            agentBroker.onStatusRequest(function(err, startInfo){
+                console.log(startInfo);
+            })
+            nodeManagerBroker.requestAgentStatus({info: 'nm request agent status'});
             setTimeout(function(){
                 done();
             }, 3000);

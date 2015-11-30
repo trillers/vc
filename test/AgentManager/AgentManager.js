@@ -5,8 +5,9 @@ var url = 'amqp://' +rabbitmq.username + ':' + rabbitmq.password + '@' + rabbitm
 var open = require('amqplib').connect(url);
 
 describe('agent manager broker test', function(){
+    var brokerPromise = BrokerFactory.create(open, {am: true, nm: true});
+
     it('send and on agent manager heartbeat', function(done){
-        var brokerPromise = BrokerFactory.create(open, {am: true});
         brokerPromise.then(function(broker){
             var agentManagerBroker = broker.getAgentManager();
             agentManagerBroker.onHeartbeat(function(err, beatInfo){
@@ -19,6 +20,21 @@ describe('agent manager broker test', function(){
             }, 3000);
         });
     })
+
+    it('on node manager status request', function(done){
+        brokerPromise.then(function(broker){
+            var agentManagerBroker = broker.getAgentManager();
+            var nodeManagerBroker = broker.getNodeManager();
+            agentManagerBroker.onStatusRequest(function(err, startInfo){
+                console.log(startInfo);
+            })
+            nodeManagerBroker.requestAgentManagerStatus({info: 'nm request agent manager status'});
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    })
+
 })
 
 
