@@ -9,10 +9,10 @@ describe('agent manager broker test', function(){
         var brokerPromise = BrokerFactory.create(open, {am: true});
         brokerPromise.then(function(broker){
             var agentManagerBroker = broker.getAgentManager();
-            agentManagerBroker.onHeartBeat(function(err, beatInfo){
+            agentManagerBroker.onHeartbeat(function(err, beatInfo){
                 console.log(beatInfo);
             })
-            agentManagerBroker.heartBeat({beat: 'i am a agent manager heart beat'});
+            agentManagerBroker.heartbeat({beat: 'i am a agent manager heart beat'});
 
             setTimeout(function(){
                 done();

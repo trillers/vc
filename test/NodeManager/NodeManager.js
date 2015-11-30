@@ -10,10 +10,10 @@ describe('agent broker test', function(){
         brokerPromise.then(function(broker){
             var agentBroker = broker.getAgent();
             var nodeManagerBroker = broker.getNodeManager();
-            nodeManagerBroker.onHeartBeat(function(err, beatInfo){
+            nodeManagerBroker.onHeartbeat(function(err, beatInfo){
                 console.log(beatInfo);
             })
-            agentBroker.heartBeat({beat: 'i am a agent heart beat'});
+            agentBroker.heartbeat({beat: 'i am a agent heart beat'});
             setTimeout(function(){
                 done();
             }, 3000);
