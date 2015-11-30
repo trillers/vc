@@ -25,7 +25,7 @@ describe('node manager test', function(){
         brokerPromise.then(function(broker){
             var agentBroker = broker.getAgent();
             var nodeManagerBroker = broker.getNodeManager();
-            nodeManagerBroker.onAgentStatus(function(err, statusInfo){
+            nodeManagerBroker.onAgentStatusResponse(function(err, statusInfo){
                 console.log(statusInfo);
             })
             agentBroker.statusResponse({beat: 'i am a agent status'});
@@ -39,10 +39,24 @@ describe('node manager test', function(){
         brokerPromise.then(function(broker){
             var agentManagerBroker = broker.getAgentManager();
             var nodeManagerBroker = broker.getNodeManager();
-            nodeManagerBroker.onAgentManagerStatus(function(err, statusInfo){
+            nodeManagerBroker.onAgentManagerStatusResponse(function(err, statusInfo){
                 console.log(statusInfo);
             })
             agentManagerBroker.statusResponse({beat: 'i am a agent manager status'});
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    })
+
+    it('agent profile request', function(done){
+        brokerPromise.then(function(broker){
+            var agentBroker = broker.getAgent();
+            var nodeManagerBroker = broker.getNodeManager();
+            agentBroker.onProfileRequest(function(err, profile){
+                console.log(profile);
+            })
+            nodeManagerBroker.profileRequest({profile: 'agent profile request'});
             setTimeout(function(){
                 done();
             }, 3000);

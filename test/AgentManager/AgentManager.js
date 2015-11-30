@@ -28,7 +28,21 @@ describe('agent manager broker test', function(){
             agentManagerBroker.onStatusRequest(function(err, startInfo){
                 console.log(startInfo);
             })
-            nodeManagerBroker.requestAgentManagerStatus({info: 'nm request agent manager status'});
+            nodeManagerBroker.agentManagerStatusRequest({info: 'nm request agent manager status'});
+            setTimeout(function(){
+                done();
+            }, 3000);
+        });
+    })
+
+    it('send agent manager status change request', function(done){
+        brokerPromise.then(function(broker){
+            var nodeManagerBroker = broker.getNodeManager();
+            var agentMangerBroker = broker.getAgentManager();
+            nodeManagerBroker.onAgentManagerStatusChange(function(err, changeInfo){
+                console.log(changeInfo);
+            })
+            agentMangerBroker.statusChange({info: 'agent manager status change'});
             setTimeout(function(){
                 done();
             }, 3000);

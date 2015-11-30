@@ -11,10 +11,10 @@ describe('bot broker test', function(){
         brokerPromise.then(function(broker){
             var botBroker = broker.getBot();
             var nodeManagerBroker = broker.getNodeManager();
-            nodeManagerBroker.onStartAgent(function(err, startInfo){
+            nodeManagerBroker.onAgentStart(function(err, startInfo){
                 console.log(startInfo);
             })
-            botBroker.startAgent({info: 'start agent'});
+            botBroker.agentStart({info: 'start agent'});
             setTimeout(function(){
                 done();
             }, 3000);
