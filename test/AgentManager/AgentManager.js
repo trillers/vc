@@ -10,7 +10,8 @@ describe('agent manager broker test', function(){
     it('send and on agent manager heartbeat', function(done){
         brokerPromise.then(function(broker){
             var agentManagerBroker = broker.getAgentManager();
-            agentManagerBroker.onHeartbeat(function(err, beatInfo){
+            var nodeManagerBroker = broker.getNodeManager();
+            nodeManagerBroker.onAgentManagerHeartbeat(function(err, beatInfo){
                 console.log(beatInfo);
             })
             agentManagerBroker.heartbeat({beat: 'i am a agent manager heart beat'});

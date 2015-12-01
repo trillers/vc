@@ -11,7 +11,7 @@ describe('node manager test', function(){
         brokerPromise.then(function(broker){
             var agentBroker = broker.getAgent();
             var nodeManagerBroker = broker.getNodeManager();
-            nodeManagerBroker.onHeartbeat(function(err, beatInfo){
+            nodeManagerBroker.onAgentHeartbeat(function(err, beatInfo){
                 console.log(beatInfo);
             })
             agentBroker.heartbeat({beat: 'i am a agent heart beat'});
