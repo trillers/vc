@@ -5,64 +5,70 @@ var url = 'amqp://' +rabbitmq.username + ':' + rabbitmq.password + '@' + rabbitm
 var open = require('amqplib').connect(url);
 
 describe('agent broker test', function(){
-    var brokerPromise = BrokerFactory.create(open, {am: true, bot: true, nm: true, agent: true});
+    var brokerPromise = BrokerFactory.create(open, {bot: true, nm: true, agent: true});
 
-    it('send start agent request', function(done){
+    it('agent heartbeat', function(done){
         brokerPromise.then(function(broker){
             var agentBroker = broker.getAgent();
             var nodeManagerBroker = broker.getNodeManager();
-            agentBroker.onStartRequest(function(err, startInfo){
-                console.log(startInfo);
+            nodeManagerBroker.onAgentHeartbeat(function(err, beatInfo){
+                console.log(beatInfo);
             })
-            nodeManagerBroker.startRequest({info: 'nm start agent'});
+            agentBroker.heartbeat({info: 'i am a agent heartbeat'});
             setTimeout(function(){
                 done();
-            }, 3000);
+            }, 1000);
         });
     });
 
-    it('send agent status change request', function(done){
+    it('agent status change', function(done){
         brokerPromise.then(function(broker){
-            var nodeManagerBroker = broker.getNodeManager();
+            var botBroker = broker.getBot();
             var agentBroker = broker.getAgent();
+            var nodeManagerBroker = broker.getNodeManager();
+            botBroker.onAgentStatusChange(function(err, changeInfo){
+                console.log(changeInfo);
+            })
             nodeManagerBroker.onAgentStatusChange(function(err, changeInfo){
                 console.log(changeInfo);
             })
-            agentBroker.statusChange({info: 'agent status change'});
+            agentBroker.agentStatusChange({info: 'i am a agent status change to node manager'});
+            agentBroker.botStatusChange({info: 'i am a agent status change to bot'});
             setTimeout(function(){
                 done();
-            }, 3000);
+            }, 1000);
         });
-    })
+    });
 
-    it('on node manager status request', function(done){
+    it('agent action to bot', function(done){
         brokerPromise.then(function(broker){
+            var botBroker = broker.getBot();
             var agentBroker = broker.getAgent();
-            var nodeManagerBroker = broker.getNodeManager();
-            agentBroker.onStatusRequest(function(err, startInfo){
-                console.log(startInfo);
+            botBroker.onActionIn(function(err, action){
+                console.log(action);
             })
-            nodeManagerBroker.agentStatusRequest({info: 'nm request agent status'});
+
+            agentBroker.actionIn({info: 'i am a agent action'});
             setTimeout(function(){
                 done();
-            }, 3000);
+            }, 1000);
         });
-    })
+    });
 
-    it('agent profile response', function(done){
+    it('agent action feedback to bot', function(done){
         brokerPromise.then(function(broker){
-            var nodeManagerBroker = broker.getNodeManager();
+            var botBroker = broker.getBot();
             var agentBroker = broker.getAgent();
-            nodeManagerBroker.onProfileResponse(function(err, changeInfo){
-                console.log(changeInfo);
+            botBroker.onActionFeedback(function(err, feedback){
+                console.log(feedback);
             })
-            agentBroker.profileResponse({info: 'agent profile'});
+
+            agentBroker.actionFeedback({info: 'i am a agent action feedback'});
             setTimeout(function(){
                 done();
-            }, 3000);
+            }, 1000);
         });
-    })
-
+    });
 })
 
 
