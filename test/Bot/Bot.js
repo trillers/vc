@@ -48,9 +48,9 @@ describe('bot broker test', function(){
         brokerPromise.then(function(broker){
             var botBroker = broker.getBot();
             var q = botBroker.getActionOutMsgCount('test');
-            q.then(function(data){
-                console.log(data);
-                assert.ok(data.messageCount >= 0);
+            q.then(function(count){
+                console.log(count);
+                assert.ok(count >= 0);
                 done();
             })
         });
