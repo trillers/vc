@@ -5,20 +5,43 @@ var url = 'amqp://' +rabbitmq.username + ':' + rabbitmq.password + '@' + rabbitm
 var open = require('amqplib').connect(url);
 
 describe('bot broker test', function(){
-    it('send start agent request', function(done){
-        var brokerPromise = BrokerFactory.create(open, {nm: true, bot: true});
+    var brokerPromise = BrokerFactory.create(open, {bot: true, nm: true, agent: true});
+
+    it('send command to node manager', function(done){
         brokerPromise.then(function(broker){
             var botBroker = broker.getBot();
             var nodeManagerBroker = broker.getNodeManager();
-            nodeManagerBroker.onStartAgent(function(err, startInfo){
-                console.log(startInfo);
+            nodeManagerBroker.onCommand(function(err, command){
+                console.log(command);
             })
-            botBroker.startAgent({info: 'start agent'});
+            botBroker.command({info: 'i am a bot command'});
             setTimeout(function(){
                 done();
-            }, 3000);
+            }, 1000);
         });
     })
+
+    it('send action to agent', function(done){
+        brokerPromise.then(function(broker){
+            var botBroker = broker.getBot();
+            var agentBroker = broker.getAgent();
+            agentBroker.init('a1');
+            agentBroker.init('a2');
+            agentBroker.onActionOut(function(err, command){
+                console.log(command);
+            }, 'a1');
+            agentBroker.onActionOut(function(err, command){
+                console.log(command);
+            }, 'a2');
+            botBroker.actionOut({info: 'i am a agent action to a1 '}, 'a1');
+            botBroker.actionOut({info: 'i am a agent action to a2 '}, 'a2');
+
+            setTimeout(function(){
+                done();
+            }, 1000);
+        });
+    })
+
 })
 
 

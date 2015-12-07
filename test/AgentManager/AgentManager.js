@@ -5,18 +5,47 @@ var url = 'amqp://' +rabbitmq.username + ':' + rabbitmq.password + '@' + rabbitm
 var open = require('amqplib').connect(url);
 
 describe('agent manager broker test', function(){
-    it('send and on agent manager heartbeat', function(done){
-        var brokerPromise = BrokerFactory.create(open, {am: true});
+    var brokerPromise = BrokerFactory.create(open, {am: true, nm: true});
+
+    it('agent manager heartbeat', function(done){
         brokerPromise.then(function(broker){
             var agentManagerBroker = broker.getAgentManager();
-            agentManagerBroker.onHeartBeat(function(err, beatInfo){
+            var nodeManagerBroker = broker.getNodeManager();
+            nodeManagerBroker.onAgentManagerHeartbeat(function(err, beatInfo){
                 console.log(beatInfo);
             })
-            agentManagerBroker.heartBeat({beat: 'i am a agent manager heart beat'});
-
+            agentManagerBroker.heartbeat({beat: 'i am a agent manager heart beat'});
             setTimeout(function(){
                 done();
-            }, 3000);
+            }, 1000);
+        });
+    })
+
+    it('agent manager infoResponse', function(done){
+        brokerPromise.then(function(broker){
+            var agentManagerBroker = broker.getAgentManager();
+            var nodeManagerBroker = broker.getNodeManager();
+            nodeManagerBroker.onInfoResponse(function(err, info){
+                console.log(info);
+            })
+            agentManagerBroker.infoResponse({info: 'i am a agent manager info response'});
+            setTimeout(function(){
+                done();
+            }, 1000);
+        });
+    })
+
+    it('agent manager status change', function(done){
+        brokerPromise.then(function(broker){
+            var agentManagerBroker = broker.getAgentManager();
+            var nodeManagerBroker = broker.getNodeManager();
+            nodeManagerBroker.onAgentManagerStatusChange(function(err, info){
+                console.log(info);
+            })
+            agentManagerBroker.statusChange({info: 'i am a agent manager status change info '});
+            setTimeout(function(){
+                done();
+            }, 1000);
         });
     })
 })
