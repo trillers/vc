@@ -44,6 +44,18 @@ describe('bot broker test', function(){
         });
     })
 
+    it('get the msg count of action out queue', function(done){
+        brokerPromise.then(function(broker){
+            var botBroker = broker.getBot();
+            var q = botBroker.getActionOutMsgCount('test');
+            q.then(function(data){
+                console.log(data);
+                assert.ok(data.messageCount >= 0);
+                done();
+            })
+        });
+    })
+
 })
 
 
